@@ -283,8 +283,13 @@ def _make_batches(src, dst, indices, max_tokens, max_sentences, max_positions,
                     idx, src.sizes[idx], dst.sizes[idx]))
 
         sample_len = max(sample_len, src.sizes[idx], dst.sizes[idx])
-        num_tokens = (len(batch) + 1) * sample_len
+#yield batch sizes that are multiple of 8 if possible
+        if (len(batch) % 8 == 0):
+            num_tokens = (len(batch) + 8) * sample_len
+        else:
+            num_tokens = (len(batch) + 1) * sample_len
         if yield_batch(idx, num_tokens):
+#            print("sample_len, batch_size", sample_len, len(batch))
             yield batch
             batch = []
             sample_len = max(src.sizes[idx], dst.sizes[idx])

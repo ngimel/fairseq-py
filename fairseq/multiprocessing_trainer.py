@@ -180,6 +180,11 @@ class MultiprocessingTrainer(MultiprocessingEventLoop):
         return logging_output
 
     def _async_forward(self, rank, device_id, eval=False):
+#        import ctypes
+#        lib = ctypes.cdll.LoadLibrary(None)
+#        lib.cudaProfilerStart()
+        
+        start = time.time()
         if eval:
             self.model.eval()
         else:
@@ -191,10 +196,12 @@ class MultiprocessingTrainer(MultiprocessingEventLoop):
 
         # calculate loss and sample size
         self.loss, sample_size, logging_output = self.criterion(self.model, self._sample)
-
         return sample_size, logging_output
 
     def _async_backward_and_opt(self, rank, device_id, grad_denom):
+#        import ctypes
+#        lib = ctypes.cdll.LoadLibrary(None)
+#        lib.cudaProfilerStart()
         if self.loss is not None:
             # backward pass
             self.loss.backward()
@@ -220,7 +227,7 @@ class MultiprocessingTrainer(MultiprocessingEventLoop):
 
         # reset loss
         self.loss = None
-
+#        lib.cudaProfilerStop()
         return grad_norm
 
     def _model_grads(self):

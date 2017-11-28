@@ -111,7 +111,7 @@ class Dictionary(object):
 
         if isinstance(f, str):
             try:
-                with open(f, 'r', encoding='utf-8') as fd:
+                with open(f, 'r', encoding='latin1') as fd:
                     return Dictionary.load(fd)
             except:
                 raise Exception("Incorrect encoding detected in {}, please "

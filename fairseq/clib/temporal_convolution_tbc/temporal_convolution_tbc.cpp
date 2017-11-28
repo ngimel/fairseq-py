@@ -18,6 +18,8 @@ extern THCState* state;
 at::Type& getDataType(const char* dtype) {
   if (strcmp(dtype, "torch.cuda.FloatTensor") == 0) {
     return at::getType(at::kCUDA, at::kFloat);
+  } else if (strcmp(dtype, "torch.cuda.HalfTensor") == 0) {
+    return at::getType(at::kCUDA, at::kHalf);
   } else if (strcmp(dtype, "torch.FloatTensor") == 0) {
     return at::getType(at::kCPU, at::kFloat);
   } else {

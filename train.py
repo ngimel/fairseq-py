@@ -68,6 +68,7 @@ def main():
 
     # Build model and criterion
     model = utils.build_model(args, dataset.src_dict, dataset.dst_dict)
+    model = model.cuda().half()
     criterion = utils.build_criterion(args, dataset.src_dict, dataset.dst_dict)
     print('| model {}, criterion {}'.format(args.arch, criterion.__class__.__name__))
 
@@ -184,6 +185,11 @@ def train(args, epoch, batch_offset, trainer, dataset, max_positions, num_gpus):
                 wps_meter.reset()
             if args.save_interval > 0 and (i + 1) % args.save_interval == 0:
                 save_checkpoint(trainer, args, epoch, i + 1)
+#            if i==20:
+#                import sys
+#                sys.exit()
+
+
 
         t.print(collections.OrderedDict([
             ('train loss', round(loss_meter.avg, 2)),
